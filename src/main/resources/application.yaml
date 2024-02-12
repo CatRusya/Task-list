@@ -1,0 +1,18 @@
+spring:
+  config:
+    import: optional:file:.env[.properties]
+  datasource:
+    url: jdbc:postgresql://${HOST}/${POSTGRES_DB}
+    username: ${POSTGRES_USERNAME}
+    password: ${POSTGRES_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  sql:
+    init:
+      mode: always
+      continue-on-error: false
+#      data-locations: classpath:demo_data.sql
+security:
+  jwt:
+    secret: d3Flb2l1cXdvZWl3aGVranF3ZWx3cWdlanlnMTIzMmt3amhlanF3ZXNkb2l1c2RTREtKUVdKRUhERlM=
+    access: 3600000
+    refresh: 2592000000
