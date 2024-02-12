@@ -113,8 +113,7 @@ public class JwtTokenProvider {
                 .build()
                 .parseClaimsJws(token)
                 .getBody()
-                .getSubject()
-                .toString();
+                .getSubject();
     }
 
     public Authentication getAuthentication(String token){
