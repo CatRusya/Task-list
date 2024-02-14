@@ -2,7 +2,6 @@ package org.example.tasklist.domain.user;
 
 import lombok.Data;
 import org.example.tasklist.domain.task.Task;
-
 import java.util.List;
 import java.util.Set;
 

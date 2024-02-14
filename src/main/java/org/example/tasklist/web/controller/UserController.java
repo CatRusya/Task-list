@@ -28,8 +28,8 @@ public class UserController {
     private final TaskMapper taskMapper;
 
     @PutMapping
-    public UserDto update(@Validated(OnUpdate.class) @RequestBody UserDto dto) {
-        User user = userMapper.toEntity(dto);
+    public UserDto update(@Validated(OnUpdate.class)@RequestBody UserDto userDto) {
+        User user = userMapper.toEntity(userDto);
         User updateUser = userService.update(user);
         return userMapper.toDto(updateUser);
     }
