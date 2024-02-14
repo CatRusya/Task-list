@@ -50,13 +50,14 @@ public class UserServiceImpl implements UserService {
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.create(user);
-        user.setRoles(Set.of(Role.ROLE_USER));
+        Set<Role> roles = Set.of(Role.ROLE_USER);
         userRepository.insertUserRole(user.getId(), Role.ROLE_USER);
+        user.setRoles(roles);
         return user;
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public boolean isTaskOwner(Long userId, Long taskId) {
         return userRepository.isTaskOwner(userId, taskId);
     }
