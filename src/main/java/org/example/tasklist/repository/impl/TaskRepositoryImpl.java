@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 
-@Repository
+//@Repository
 @RequiredArgsConstructor
 public class TaskRepositoryImpl implements TaskRepository {
     private final DataSourceConfig dataSourceConfig;
@@ -25,7 +25,7 @@ public class TaskRepositoryImpl implements TaskRepository {
                    t.status          as task_status,
                    t.expiration_date as task_expiration_date
             FROM tasks t
-            WHERE id = ?
+            WHERE t.id = ?
             """;
 
     private final String FIND_ALL_BY_USER_ID = """
