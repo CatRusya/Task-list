@@ -1,5 +1,6 @@
 package org.example.tasklist.web.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.example.tasklist.domain.user.User;
 import org.example.tasklist.service.AuthService;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
 @Validated
+@Tag(name = "Auth Controller", description = "Auth API")
 public class AuthController {
     private final AuthService authService;
     private final UserService userService;
