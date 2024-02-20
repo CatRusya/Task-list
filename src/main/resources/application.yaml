@@ -22,3 +22,5 @@ security:
     secret: d3Flb2l1cXdvZWl3aGVranF3ZWx3cWdlanlnMTIzMmt3amhlanF3ZXNkb2l1c2RTREtKUVdKRUhERlM=
     access: 3600000
     refresh: 2592000000
+springdoc:
+  override-with-generic-response: false
