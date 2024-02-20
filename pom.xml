@@ -25,6 +25,7 @@
         <jakarta-validation.version>3.0.2</jakarta-validation.version>
         <jjwt.version>0.11.5</jjwt.version>
         <mybatis.version>3.0.1</mybatis.version>
+        <liquibase.version>4.19.0</liquibase.version>
     </properties>
     
     <dependencies>
@@ -52,6 +53,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
             <version>3.0.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mybatis.spring.boot</groupId>
+            <artifactId>mybatis-spring-boot-starter</artifactId>
+            <version>${mybatis.version}</version>
         </dependency>
 
         <dependency>
@@ -113,9 +120,9 @@
         </dependency>
 
         <dependency>
-            <groupId>org.mybatis.spring.boot</groupId>
-            <artifactId>mybatis-spring-boot-starter</artifactId>
-            <version>${mybatis.version}</version>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-core</artifactId>
+            <version>${liquibase.version}</version>
         </dependency>
 
     </dependencies>
