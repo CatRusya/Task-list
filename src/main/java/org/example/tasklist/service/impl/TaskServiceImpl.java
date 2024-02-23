@@ -4,8 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.example.tasklist.domain.exception.ResourceNotFoundException;
 import org.example.tasklist.domain.task.Status;
 import org.example.tasklist.domain.task.Task;
+import org.example.tasklist.domain.user.User;
 import org.example.tasklist.repository.TaskRepository;
 import org.example.tasklist.service.TaskService;
+import org.example.tasklist.service.UserService;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -19,6 +21,7 @@ import java.util.List;
 public class TaskServiceImpl implements TaskService {
 
     private final TaskRepository taskRepository;
+    private final UserService userService;
 
     @Override
     @Transactional(readOnly = true)
@@ -41,7 +44,7 @@ public class TaskServiceImpl implements TaskService {
         if (task.getStatus() == null) {
             task.setStatus(Status.TODO);
         }
-        taskRepository.update(task);
+        taskRepository.save(task);
         return task;
     }
 
@@ -53,9 +56,10 @@ public class TaskServiceImpl implements TaskService {
             key = "#task.id"
     )
     public Task create(Task task, Long userId) {
+        User user = userService.getById(userId);
         task.setStatus(Status.TODO);
-        taskRepository.create(task);
-        taskRepository.assignToUserById(task.getId(), userId);
+        user.getTasks().add(task);
+        userService.update(user);
         return task;
     }
 
@@ -63,6 +67,6 @@ public class TaskServiceImpl implements TaskService {
     @Transactional
     @CacheEvict(value = "TaskService::getById", key = "#id")
     public void delete(Long id) {
-        taskRepository.delete(id);
+        taskRepository.deleteById(id);
     }
 }
