@@ -71,7 +71,7 @@
 
     <insert id="insertUserRole">
         INSERT INTO users_roles (user_id, role)
-        VALUES (#{user_id}, #{role)
+        VALUES (#{userId}, #{role})
     </insert>
 
     <select id="isTaskOwner" resultType="boolean">
