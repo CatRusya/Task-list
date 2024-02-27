@@ -1,12 +1,14 @@
 package org.example.tasklist.config;
 
 
+import io.minio.MinioClient;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import lombok.RequiredArgsConstructor;
+import org.example.tasklist.service.props.MinioProperties;
 import org.example.tasklist.web.security.JwtTokenFilter;
 import org.example.tasklist.web.security.JwtTokenProvider;
 import org.example.tasklist.web.security.expression.CustomSecurityExpressionHandler;
@@ -20,7 +22,6 @@ import org.springframework.security.access.expression.method.MethodSecurityExpre
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -37,6 +38,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class ApplicationConfig {
     private final ApplicationContext applicationContext;
     private final JwtTokenProvider jwtTokenProvider;
+    private final MinioProperties minioProperties;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -53,6 +55,14 @@ public class ApplicationConfig {
         DefaultMethodSecurityExpressionHandler expressionHandler = new CustomSecurityExpressionHandler();
         expressionHandler.setApplicationContext(applicationContext);
         return expressionHandler;
+    }
+
+    @Bean
+    public MinioClient minioClient(){
+        return MinioClient.builder()
+                .endpoint(minioProperties.getUrl())
+                .credentials(minioProperties.getAccessKey(), minioProperties.getSecretKey())
+                .build();
     }
 
     @Bean

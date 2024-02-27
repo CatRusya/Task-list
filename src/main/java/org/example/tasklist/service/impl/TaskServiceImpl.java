@@ -4,8 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.example.tasklist.domain.exception.ResourceNotFoundException;
 import org.example.tasklist.domain.task.Status;
 import org.example.tasklist.domain.task.Task;
+import org.example.tasklist.domain.task.TaskImage;
 import org.example.tasklist.domain.user.User;
 import org.example.tasklist.repository.TaskRepository;
+import org.example.tasklist.service.ImageService;
 import org.example.tasklist.service.TaskService;
 import org.example.tasklist.service.UserService;
 import org.springframework.cache.annotation.CacheEvict;
@@ -22,6 +24,7 @@ public class TaskServiceImpl implements TaskService {
 
     private final TaskRepository taskRepository;
     private final UserService userService;
+    private final ImageService imageService;
 
     @Override
     @Transactional(readOnly = true)
@@ -68,5 +71,15 @@ public class TaskServiceImpl implements TaskService {
     @CacheEvict(value = "TaskService::getById", key = "#id")
     public void delete(Long id) {
         taskRepository.deleteById(id);
+    }
+
+    @Override
+    @Transactional
+    @CacheEvict(value = "TaskService::getById", key = "#id")
+    public void uploadImage(Long id, TaskImage image) {
+        Task task = getById(id);
+        String fileName = imageService.upload(image);
+        task.getImages().add(fileName);
+        taskRepository.save(task);
     }
 }
