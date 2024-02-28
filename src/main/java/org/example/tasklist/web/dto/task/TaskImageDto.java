@@ -7,7 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Data
 public class TaskImageDto {
 
-    @NotNull (message = "Image must be not null")
+    @NotNull(message = "Image must be not null")
     private MultipartFile file;
 
 }

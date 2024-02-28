@@ -1,7 +1,6 @@
 package org.example.tasklist.service;
 
 import org.example.tasklist.domain.user.User;
-import org.springframework.stereotype.Service;
 
 
 public interface UserService {

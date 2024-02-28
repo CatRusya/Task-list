@@ -17,6 +17,7 @@ public class AuthServiceImpl implements AuthService {
     private final AuthenticationManager authenticationManager;
     private final UserService userService;
     private final JwtTokenProvider jwtTokenProvider;
+
     @Override
     public JwtResponse login(JwtRequest loginRequest) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
@@ -24,7 +25,7 @@ public class AuthServiceImpl implements AuthService {
         return JwtResponse.builder()
                 .id(user.getId())
                 .username(loginRequest.getUsername())
-                .accessToken(jwtTokenProvider.createAccessToken(user.getId(), user.getUsername(),user.getRoles()))
+                .accessToken(jwtTokenProvider.createAccessToken(user.getId(), user.getUsername(), user.getRoles()))
                 .refreshToken(jwtTokenProvider.createRefreshToken(user.getId(), user.getUsername()))
                 .build();
     }
