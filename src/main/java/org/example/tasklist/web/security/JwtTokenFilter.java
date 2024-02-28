@@ -28,10 +28,11 @@ public class JwtTokenFilter extends GenericFilterBean {
         if (bearerToken != null && jwtTokenProvider.validateToken(bearerToken)) {
             try {
                 Authentication authentication = jwtTokenProvider.getAuthentication(bearerToken);
-                if(authentication!=null){
+                if (authentication != null) {
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 }
-            } catch (ResourceNotFoundException ignore){}
+            } catch (ResourceNotFoundException ignore) {
+            }
         }
         filterChain.doFilter(servletRequest, servletResponse);
     }

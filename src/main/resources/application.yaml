@@ -14,11 +14,11 @@ spring:
     username: ${POSTGRES_USERNAME}
     password: ${POSTGRES_PASSWORD}
     driver-class-name: org.postgresql.Driver
-#  sql:
-#    init:
-#      mode: never
-#      continue-on-error: false
-#      data-locations: classpath:demo_data.sql
+  #  sql:
+  #    init:
+  #      mode: never
+  #      continue-on-error: false
+  #      data-locations: classpath:demo_data.sql
   liquibase:
     change-log: classpath:liquibase/db.changelog.yaml
     enabled: true

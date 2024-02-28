@@ -51,14 +51,14 @@ public class ApplicationConfig {
     }
 
     @Bean
-    public MethodSecurityExpressionHandler expressionHandler(){
+    public MethodSecurityExpressionHandler expressionHandler() {
         DefaultMethodSecurityExpressionHandler expressionHandler = new CustomSecurityExpressionHandler();
         expressionHandler.setApplicationContext(applicationContext);
         return expressionHandler;
     }
 
     @Bean
-    public MinioClient minioClient(){
+    public MinioClient minioClient() {
         return MinioClient.builder()
                 .endpoint(minioProperties.getUrl())
                 .credentials(minioProperties.getAccessKey(), minioProperties.getSecretKey())
@@ -66,7 +66,7 @@ public class ApplicationConfig {
     }
 
     @Bean
-    public OpenAPI openAPI(){
+    public OpenAPI openAPI() {
         return new OpenAPI()
                 .addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
                 .components(
