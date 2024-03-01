@@ -25,26 +25,29 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(readOnly = true)
     @Cacheable(value = "UserService::getById", key = "#id")
-    public User getById(Long id) {
+    public User getById(final Long id) {
         return userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found."));
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("User not found."));
     }
 
     @Override
     @Transactional(readOnly = true)
     @Cacheable(value = "UserService::getByUsername", key = "#username")
-    public User getByUsername(String username) {
+    public User getByUsername(final String username) {
         return userRepository.findByUsername(username)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found."));
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("User not found."));
     }
 
     @Override
     @Transactional
     @Caching(put = {
             @CachePut(value = "UserService::getById", key = "#user.id"),
-            @CachePut(value = "UserService::getByUsername", key = "#user.username")
+            @CachePut(value = "UserService::getByUsername",
+                    key = "#user.username")
     })
-    public User update(User user) {
+    public User update(final User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
         return user;
@@ -64,12 +67,13 @@ public class UserServiceImpl implements UserService {
                     key = "#user.username"
             )
     })
-    public User create(User user) {
+    public User create(final User user) {
         if (userRepository.findByUsername(user.getUsername()).isPresent()) {
             throw new IllegalStateException("User already exist");
         }
         if (!user.getPassword().equals(user.getPasswordConfirmation())) {
-            throw new IllegalStateException("Password and password confirmation doesn't match");
+            throw new IllegalStateException(
+                    "Password and password confirmation doesn't match");
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
@@ -81,15 +85,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(readOnly = true)
-    @Cacheable(value = "UserService::isTaskOwner", key = "#userId + '.' + #taskId")
-    public boolean isTaskOwner(Long userId, Long taskId) {
+    @Cacheable(value = "UserService::isTaskOwner",
+            key = "#userId + '.' + #taskId")
+    public boolean isTaskOwner(final Long userId, final Long taskId) {
+
         return userRepository.isTaskOwner(userId, taskId);
     }
 
     @Override
     @Transactional
     @CacheEvict(value = "UserService::getById", key = "#id")
-    public void delete(Long id) {
+    public void delete(final Long id) {
         userRepository.deleteById(id);
     }
 }
