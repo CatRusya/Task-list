@@ -5,11 +5,9 @@ import org.example.tasklist.domain.exception.ResourceNotFoundException;
 import org.example.tasklist.domain.task.Status;
 import org.example.tasklist.domain.task.Task;
 import org.example.tasklist.domain.task.TaskImage;
-import org.example.tasklist.domain.user.User;
 import org.example.tasklist.repository.TaskRepository;
 import org.example.tasklist.service.ImageService;
 import org.example.tasklist.service.TaskService;
-import org.example.tasklist.service.UserService;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -23,7 +21,6 @@ import java.util.List;
 public class TaskServiceImpl implements TaskService {
 
     private final TaskRepository taskRepository;
-    private final UserService userService;
     private final ImageService imageService;
 
     @Override
@@ -60,11 +57,11 @@ public class TaskServiceImpl implements TaskService {
             key = "#task.id"
     )
     public Task create(final Task task, final Long userId) {
-        User user = userService.getById(userId);
-        task.setStatus(Status.TODO);
+        if (task.getStatus() != null) {
+            task.setStatus(Status.TODO);
+        }
         taskRepository.save(task);
-        user.getTasks().add(task);
-        userService.update(user);
+        taskRepository.assignTask(userId, task.getId());
         return task;
     }
 
@@ -79,9 +76,7 @@ public class TaskServiceImpl implements TaskService {
     @Transactional
     @CacheEvict(value = "TaskService::getById", key = "#id")
     public void uploadImage(final Long id, final TaskImage image) {
-        Task task = getById(id);
         String fileName = imageService.upload(image);
-        task.getImages().add(fileName);
-        taskRepository.save(task);
+        taskRepository.addImage(id, fileName);
     }
 }
