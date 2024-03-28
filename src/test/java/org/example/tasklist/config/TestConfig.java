@@ -5,19 +5,17 @@ import lombok.RequiredArgsConstructor;
 import org.example.tasklist.repository.TaskRepository;
 import org.example.tasklist.repository.UserRepository;
 import org.example.tasklist.service.ImageService;
-import org.example.tasklist.service.impl.AuthServiceImpl;
-import org.example.tasklist.service.impl.ImageServiceImpl;
-import org.example.tasklist.service.impl.TaskServiceImpl;
-import org.example.tasklist.service.impl.UserServiceImpl;
+import org.example.tasklist.service.impl.*;
 import org.example.tasklist.service.props.JwtProperties;
 import org.example.tasklist.service.props.MinioProperties;
 import org.example.tasklist.web.security.JwtTokenProvider;
 import org.example.tasklist.web.security.JwtUserDetailsService;
-import org.mapstruct.ap.shaded.freemarker.template.Configuration;
+import freemarker.template.Configuration;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -65,16 +63,16 @@ public class TestConfig {
         return Mockito.mock(Configuration.class);
     }
 
-//    @Bean
-//    public JavaMailSender mailSender() {
-//        return Mockito.mock(JavaMailSender.class);
-//    }
+    @Bean
+    public JavaMailSender mailSender() {
+        return Mockito.mock(JavaMailSender.class);
+    }
 
-//    @Bean
-//    @Primary
-//    public MailServiceImpl mailService() {
-//        return new MailServiceImpl(configuration(), mailSender());
-//    }
+    @Bean
+    @Primary
+    public MailServiceImpl mailService() {
+        return new MailServiceImpl(configuration(), mailSender());
+    }
 
     @Bean
     @Primary
@@ -96,7 +94,8 @@ public class TestConfig {
     public UserServiceImpl userService(final UserRepository userRepository) {
         return new UserServiceImpl(
                 userRepository,
-                testPasswordEncoder()
+                testPasswordEncoder(),
+                mailService()
         );
     }
 
